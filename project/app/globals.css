@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --border: 228 33% 97%;
+  --input: 228 33% 97%;
+  --ring: 324 100% 75%;
+  --background: 0 0% 100%;
+  --foreground: 0 0% 8%;
+  --primary: 324 100% 75%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 0 0% 96%;
+  --accent-foreground: 0 0% 9%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 8%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 8%;
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply text-ink-900 leading-snug text-sm font-sans font-normal;
+  }
+
+  h1 {
+    @apply text-xl md:text-3xl font-bold leading-tight tracking-tight;
+  }
+
+  h2 {
+    @apply text-lg md:text-xl font-semibold leading-tight;
+  }
+
+  h3 {
+    @apply text-base font-semibold leading-snug;
+  }
+
+  p {
+    @apply leading-relaxed text-ink-600 font-light text-sm;
+  }
+
+  .text-large {
+    @apply text-sm md:text-base leading-snug font-light;
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FF5FA2;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #e04a8c;
+}
+
+/* Focus styles */
