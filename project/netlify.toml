@@ -6,7 +6,14 @@
   package = "@netlify/plugin-nextjs"
 
 [functions]
+  # Directory for Netlify Functions. Ensure this exists in the repository.
   directory = "netlify/functions"
+
+[context.production.environment]
+# If your build embeds public client keys into Next.js cache files, you can instruct
+# the Netlify secrets scanner to ignore build cache paths instead of omitting keys.
+# This avoids whitelisting keys and reduces risk of accidentally allowing other secrets.
+  SECRETS_SCAN_OMIT_PATHS = ".next/cache/**,.netlify/**"
 
 [[redirects]]
   from = "/api/*"

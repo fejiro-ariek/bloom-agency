@@ -1,0 +1,2 @@
+This directory exists to satisfy Netlify's configured functions directory.
+Remove or replace with real functions if you add serverless functions.
