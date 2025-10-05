@@ -122,16 +122,37 @@ export function ApplicationForm() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify(formData),
       });
 
       console.log('Response status:', response.status);
-      const data = await response.json();
-      console.log('Response data:', data);
+
+      let data: any = null;
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        try {
+          data = await response.json();
+          console.log('Response data (json):', data);
+        } catch (jsonErr) {
+          console.warn('Failed to parse JSON response:', jsonErr);
+          data = { error: 'Invalid JSON response from server' };
+        }
+      } else {
+        // If server returned non-JSON (HTML or empty), capture text for debugging
+        try {
+          const text = await response.text();
+          console.warn('Response text:', text.slice(0, 1000));
+          data = { error: text || 'Empty response from server' };
+        } catch (textErr) {
+          console.warn('Failed to read response text:', textErr);
+          data = { error: 'Unknown server response' };
+        }
+      }
 
       if (response.ok) {
-        setToast({ message: data.message, type: 'success' });
+        setToast({ message: data?.message || 'Thanks! We\'ll be in touch.', type: 'success' });
         // Reset form
         setFormData({
           instagram: '',
@@ -147,11 +168,15 @@ export function ApplicationForm() {
         });
         setErrors({});
       } else {
-        setToast({ message: data.error || 'Something went wrong', type: 'error' });
+        const message = data?.error || 'Something went wrong';
+        console.error('Server returned error:', message);
+        setToast({ message, type: 'error' });
       }
-    } catch (error) {
-      console.error('Network error:', error);
-      setToast({ message: 'Network error. Please try again.', type: 'error' });
+    } catch (err: any) {
+      // This catches network errors and other unexpected issues
+      console.error('Network or fetch error:', err);
+      const message = err?.message || 'Network error. Please try again.';
+      setToast({ message, type: 'error' });
     } finally {
       setIsSubmitting(false);
     }
@@ -214,7 +239,7 @@ export function ApplicationForm() {
 
         <div>
           <label htmlFor="university" className="block text-xs font-medium text-ink-900 mb-1">
-            University - e.g., "Newcastle" *
+            University - e.g., &quot;Newcastle&quot; *
           </label>
           <input
             type="text"
@@ -231,7 +256,7 @@ export function ApplicationForm() {
 
         <div>
           <label htmlFor="degree" className="block text-xs font-medium text-ink-900 mb-1">
-            Degree - e.g., "BA Marketing (2nd year)" *
+            Degree - e.g., &quot;BA Marketing (2nd year)&quot; *
           </label>
           <input
             type="text"
@@ -282,7 +307,7 @@ export function ApplicationForm() {
 
         <div>
           <label htmlFor="experience" className="block text-xs font-medium text-ink-900 mb-1">
-            What's your experience? *
+            What&apos;s your experience? *
           </label>
           <textarea
             id="experience"
@@ -310,7 +335,7 @@ export function ApplicationForm() {
             </div>
             <div className="ml-3 text-xs">
               <label htmlFor="femaleUK" className="text-ink-900">
-                I confirm I'm female and based in the UK. *
+                I confirm I&apos;m female and based in the UK. *
               </label>
               {errors.femaleUK && (
                 <p className="text-pink-500 text-xs mt-0.5">{errors.femaleUK}</p>

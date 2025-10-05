@@ -15,7 +15,4 @@
 # This avoids whitelisting keys and reduces risk of accidentally allowing other secrets.
   SECRETS_SCAN_OMIT_PATHS = ".next/cache/**,.netlify/**"
 
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
+## Let the Netlify Next plugin handle Next.js API routes; custom redirect removed
